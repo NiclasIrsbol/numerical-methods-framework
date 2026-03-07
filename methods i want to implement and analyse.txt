@@ -1,0 +1,37 @@
+Square root algorithms
+Heron's method
+Bakhshali method
+
+Finding roots of functions: 
+Bisection method
+Newton's-Rhapsons method
+Secant Method
+
+Interpolation & Approximation
+Do research here
+
+Systems of linear equations
+Inverse Method
+Gauss-Jordan elimination
+LU factorization
+Jacobi method
+
+Differential equations
+Euler method
+Runge–Kutta methods
+
+Differentiation
+Do research here
+
+Integrals
+Simpsons method
+Trapezoidal rule
+Midpoint rule
+
+Optimization
+Gradient descent
+Newton’s method for optimization
+Quasi-Newton (BFGS)
+
+Metrics to add:
+Error, convergence, stability, conditioning
