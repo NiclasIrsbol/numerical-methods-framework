@@ -2,21 +2,33 @@ import { useState } from "react"
 
 export default function App() {
   const [text, setText] = useState('')
+  const [value, setValue] = useState('Heron\'s method');
 
-  async function fetchData() {
-    const response = await fetch('http://localhost:8000/')
-    if (response.ok) {
-    const data = await response.json()
-    console.log(data)
-    setText(data)
-    }
+  const handleChange = (e: any) => {
+    setValue(e.target.value);
+  };
+
+  async function run() {
+  const rawResponse = await fetch('http://localhost:8000/run', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({algorithm: value})
+  });
+  const content = await rawResponse.json();
+  console.log(content);
   }
 
   return (
     <div>
-      <h1>Press button</h1>
-      <button onClick={fetchData}>Press me</button>
-      <h1>{text}</h1>
+      <h1>Select numerical algorithms</h1>
+      <select value={value} onChange={handleChange}>
+        <option value="Heron's method">Heron's method</option>
+        <option value="Bakhshali method">Bakhshali method</option>
+      </select>
+      <button onClick={run}>Run</button>
     </div>
   )
 }
