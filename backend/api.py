@@ -29,4 +29,12 @@ async def root():
 async def run(model : Model):
     selectedalgorithm = model.algorithm
     if (selectedalgorithm == "Heron's method"):
-        return {"result": square_root.herons(70)}
+        return {
+            "algorithm": selectedalgorithm,    
+            "result": square_root.herons(70)
+        }
+    if (selectedalgorithm == "Bakhshali method"):
+        return {
+            "algorithm": selectedalgorithm,   
+            "result" : square_root.bakhshali(70)
+        }
