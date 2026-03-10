@@ -8,6 +8,12 @@ app = FastAPI()
 
 class Model(BaseModel):
     algorithm: str
+    params: dict
+
+ALGORITHMS = {
+    "Heron's method": square_root.herons,
+    "Bakhshali method": square_root.bakhshali,
+}
 
 origins = [
     "http://localhost:5173",
@@ -21,20 +27,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
 @app.post("/run")
 async def run(model : Model):
-    selectedalgorithm = model.algorithm
-    if (selectedalgorithm == "Heron's method"):
-        return {
-            "algorithm": selectedalgorithm,    
-            "result": square_root.herons(70)
-        }
-    if (selectedalgorithm == "Bakhshali method"):
-        return {
-            "algorithm": selectedalgorithm,   
-            "result" : square_root.bakhshali(70)
+    algorithm = ALGORITHMS.get(model.algorithm)
+    params = model.params
+    result = algorithm(**params)
+    return {
+        "algorithm": model.algorithm,
+        "result:": result,
+        "params": params
         }
