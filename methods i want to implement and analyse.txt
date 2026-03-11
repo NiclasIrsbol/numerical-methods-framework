@@ -34,4 +34,4 @@ Newton’s method for optimization
 Quasi-Newton (BFGS)
 
 Metrics to add:
-Error, convergence, stability, conditioning
+Error

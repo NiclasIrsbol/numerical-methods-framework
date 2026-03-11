@@ -1,12 +1,14 @@
 import { useState } from "react"
 import "./App.css"
 import { TbMathFunction } from "react-icons/tb";
+import Linechart from "./components/linecharts"
 
 export default function App() {
   const [value, setValue] = useState('Heron\'s method');
   const [num, setNum] = useState(0);
   const [numiter, setNumIter] = useState(0);
   const [result, setResult] = useState(null)
+  const [guesses, setGuesses] = useState([]);
   
   const handleChange = (e: any) => {
     setValue(e.target.value);
@@ -25,8 +27,9 @@ export default function App() {
     })
   });
   const content = await rawResponse.json();
-  console.log(content);
-  setResult(content);
+  const g = content.guesses;
+  setResult(content.Metrics);
+  setGuesses(g);
   }
 
   return (
@@ -49,6 +52,7 @@ export default function App() {
           <h1 className="center-containerText">Visualizer</h1>
           <div className="center-container-graphs">
             <h2 className="center-container-graphsText">Algorithm: {value}</h2>
+            <Linechart guesses={guesses}/>
           </div>
           <div className="center-container-result">
             <pre className="result-code">{JSON.stringify(result, null, 2)}</pre>

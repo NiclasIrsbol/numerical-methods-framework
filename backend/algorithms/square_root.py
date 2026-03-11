@@ -1,6 +1,7 @@
 import math
 
 def herons(s, iter):
+    guesses = []
     if (s<0):
         return "Number cannot be negative"
     else:
@@ -8,10 +9,17 @@ def herons(s, iter):
         for _ in range(iter):
             newx = 1/2*(guess+s/guess)
             guess = newx
+            guesses.append(guess)
     error = (guess - math.sqrt(s))/(math.sqrt(s)) * 100
-    return {"approx-value: ": guess, "error (%): " : error}
+    return {
+        "Metrics": {
+        "approx-value: ": guess, "error (%): " : error
+    }, 
+        "guesses": guesses
+    }
 
 def bakhshali(s, iter):
+    guesses = []
     if (s<0):
         return "Number cannot be negative"
     else:
@@ -21,5 +29,11 @@ def bakhshali(s, iter):
             x1 = guess+a_0
             x2 = x1-(a_0*a_0)/(2*x1)
             guess = x2
+            guesses.append(guess)
     error = (guess - math.sqrt(s))/(math.sqrt(s)) * 100
-    return {"approx-value: ": guess, "error (%): " : error}
+    return {
+        "Metrics": {
+        "approx-value: ": guess, "error (%): " : error
+    }, 
+        "guesses": guesses
+    }

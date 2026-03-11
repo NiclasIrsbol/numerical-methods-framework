@@ -32,6 +32,4 @@ async def run(model : Model):
     algorithm = ALGORITHMS.get(model.algorithm)
     params = model.params
     result = algorithm(**params)
-    return {
-        "result:": result,
-        }
+    return result
