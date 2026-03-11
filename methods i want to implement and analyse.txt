@@ -1,6 +1,6 @@
 Square root algorithms
-Heron's method
-Bakhshali method
+Heron's method - Done
+Bakhshali method - Done
 
 Finding roots of functions: 
 Bisection method
