@@ -1,4 +1,4 @@
-from algorithms import square_root
+from algorithms import square_root, roots
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,6 +13,7 @@ class Model(BaseModel):
 ALGORITHMS = {
     "Heron's method": square_root.herons,
     "Bakhshali method": square_root.bakhshali,
+    "Bisection method": roots.bisection_method,
 }
 
 origins = [

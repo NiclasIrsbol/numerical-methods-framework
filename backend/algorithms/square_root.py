@@ -1,6 +1,8 @@
 import math
 
 def herons(s, iter):
+    s = float(s)
+    iter = int(iter)
     guesses = []
     if (s<0):
         return "Number cannot be negative"
@@ -19,6 +21,8 @@ def herons(s, iter):
     }
 
 def bakhshali(s, iter):
+    s = float(s)
+    iter = int(iter)
     guesses = []
     if (s<0):
         return "Number cannot be negative"

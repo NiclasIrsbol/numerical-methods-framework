@@ -3,15 +3,48 @@ import "./App.css"
 import { TbMathFunction } from "react-icons/tb";
 import Linechart from "./components/linecharts"
 
+type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method";
+
+type ParamDef = {
+  key: string;
+  label: string;
+  type: "number" | "text";
+  min?: number;
+  placeholder?: string;
+  defaultValue?: number | string;
+};
+
+const paramDefs: Record<AlgorithmName, ParamDef[]> = {
+  "Heron's method": [
+    { key: "s", label: "Number", type: "number", min: 1, placeholder: "Number for square root", defaultValue: 2 },
+    { key: "iter", label: "Iterations", type: "number", min: 2, placeholder: "Number of iterations", defaultValue: 10 },
+  ],
+  "Bakhshali method": [
+    { key: "s", label: "Number", type: "number", min: 1, placeholder: "Number for square root", defaultValue: 2 },
+    { key: "iter", label: "Iterations", type: "number", min: 2, placeholder: "Number of iterations", defaultValue: 10 },
+  ],
+  "Bisection method": [
+    {key: "f", label: "f(x)", type: "text", placeholder: "Enter function", defaultValue: "x^2"},
+    {key: "a", label: "Lower bound (a)", type: "number", placeholder: "Enter lower bound", defaultValue: 1},
+    {key: "b", label: "Upper bound (b)", type: "number", placeholder: "Enter upper bound", defaultValue: 5},
+  ],
+};
+
 export default function App() {
-  const [value, setValue] = useState('Heron\'s method');
-  const [num, setNum] = useState(0);
-  const [numiter, setNumIter] = useState(0);
   const [result, setResult] = useState(null)
   const [guesses, setGuesses] = useState([]);
+  const [value, setValue] = useState<AlgorithmName>("Heron's method");
+  const [paramValues, setParamValues] = useState<Record<string, number | string>>({ s: 0, iter: 0 });
+  const showChart = value === "Heron's method" || value === "Bakhshali method";
   
   const handleChange = (e: any) => {
-    setValue(e.target.value);
+    const nextAlg = e.target.value as AlgorithmName;
+    setValue(nextAlg);
+
+    const defaults: Record<string, number | string> = {};
+    for (const def of paramDefs[nextAlg]) defaults[def.key];
+    setParamValues(defaults);
+    setGuesses([]);
   };
 
   async function run() {
@@ -23,7 +56,7 @@ export default function App() {
     },
     body: JSON.stringify({
       algorithm: value,
-      params: {s: num, iter: numiter}
+      params: paramValues
     })
   });
   const content = await rawResponse.json();
@@ -44,6 +77,7 @@ export default function App() {
             <select value={value} onChange={handleChange}>
               <option value="Heron's method">Heron's method</option>
               <option value="Bakhshali method">Bakhshali method</option>
+              <option value="Bisection method">Bisection method</option>
             </select>
           </div>
         </div>
@@ -52,7 +86,7 @@ export default function App() {
           <h1 className="center-containerText">Visualizer</h1>
           <div className="center-container-graphs">
             <h2 className="center-container-graphsText">Algorithm: {value}</h2>
-            <Linechart guesses={guesses}/>
+            {showChart && <Linechart guesses={guesses} />}
           </div>
           <div className="center-container-result">
             <pre className="result-code">{JSON.stringify(result, null, 2)}</pre>
@@ -65,28 +99,23 @@ export default function App() {
         <div className="right-container">
           <div className="right-containerText">
             <h2 className="right-containerHeader">Choose params:</h2>
-            <div className="form-field">
-              <label className="field-label" htmlFor="sqrt-number">Number</label>
-              <input
-                id="sqrt-number"
-                type="number"
-                min="1"
-                placeholder="Number for square root"
-                onChange={(e) => setNum(Number(e.target.value))}
-              ></input>
-            </div>
-
-            <div className="form-field">
-              <label className="field-label" htmlFor="iterations">Iterations</label>
-              <input
-                id="iterations"
-                type="number"
-                min="2"
-                placeholder="Number of iterations"
-                onChange={(e) => setNumIter(Number(e.target.value))}
-              ></input>
-            </div>
-
+            {paramDefs[value].map((def) => (
+              <div className="form-field" key={def.key}>
+                <label className="field-label">{def.label}</label>
+                <input
+                  type={def.type}
+                  min={def.min}
+                  placeholder={def.placeholder}
+                  value={paramValues[def.key] ?? ""}
+                  onChange={(e) =>
+                    setParamValues((prev) => ({
+                      ...prev,
+                      [def.key]: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+            ))}
             <button className="runBtn" onClick={run}>Run</button>
           </div>
         </div>
