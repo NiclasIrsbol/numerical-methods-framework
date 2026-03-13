@@ -14,6 +14,9 @@ ALGORITHMS = {
     "Heron's method": square_root.herons,
     "Bakhshali method": square_root.bakhshali,
     "Bisection method": roots.bisection_method,
+    "Newton Rhapson method": roots.newton_rhapson_method,
+    "Secant method": roots.secant_method,
+    
 }
 
 origins = [

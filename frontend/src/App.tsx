@@ -2,14 +2,16 @@ import { useState } from "react"
 import "./App.css"
 import { TbMathFunction } from "react-icons/tb";
 import Linechart from "./components/linecharts"
+import Graph from "./components/graph"
 
-type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method";
+type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method" | "Newton Rhapson method" | "Secant method";
 
 type ParamDef = {
   key: string;
   label: string;
   type: "number" | "text";
   min?: number;
+  max?: number;
   placeholder?: string;
   defaultValue?: number | string;
 };
@@ -17,17 +19,29 @@ type ParamDef = {
 const paramDefs: Record<AlgorithmName, ParamDef[]> = {
   "Heron's method": [
     { key: "s", label: "Number", type: "number", min: 1, placeholder: "Number for square root", defaultValue: 2 },
-    { key: "iter", label: "Iterations", type: "number", min: 2, placeholder: "Number of iterations", defaultValue: 10 },
+    { key: "iter", label: "Iterations", type: "number", min: 2, max: 250, placeholder: "Number of iterations", defaultValue: 10 },
   ],
   "Bakhshali method": [
     { key: "s", label: "Number", type: "number", min: 1, placeholder: "Number for square root", defaultValue: 2 },
-    { key: "iter", label: "Iterations", type: "number", min: 2, placeholder: "Number of iterations", defaultValue: 10 },
+    { key: "iter", label: "Iterations", type: "number", min: 2, max: 250, placeholder: "Number of iterations", defaultValue: 10 },
   ],
   "Bisection method": [
     {key: "f", label: "f(x)", type: "text", placeholder: "Enter function", defaultValue: "x^2"},
     {key: "a", label: "Lower bound (a)", type: "number", placeholder: "Enter lower bound", defaultValue: 1},
     {key: "b", label: "Upper bound (b)", type: "number", placeholder: "Enter upper bound", defaultValue: 5},
   ],
+  "Newton Rhapson method": [
+    {key: "f", label: "f(x)", type: "text", placeholder: "Enter function", defaultValue: "x^2"},
+    {key: "iter", label: "Iterations", type: "number", min: 2, max: 250, placeholder: "Number of iterations", defaultValue: 10 },
+    {key: "x_0", label: "Intial guess (x_0)", type: "number", placeholder: "Enter x_0", defaultValue: "2"},
+  ],
+  "Secant method": [
+    {key: "f", label: "f(x)", type: "text", placeholder: "Enter function", defaultValue: "x^2"},
+    {key: "iter", label: "Iterations", type: "number", min: 2, max: 250, placeholder: "Number of iterations", defaultValue: 10 },
+    {key: "x_0", label: "Intial guess (x0)", type: "number", placeholder: "Enter x0", defaultValue: "2"},
+    {key: "x_1", label: "Intial guess (x1)", type: "number", placeholder: "Enter x1", defaultValue: "10"},
+  ],
+
 };
 
 export default function App() {
@@ -36,15 +50,18 @@ export default function App() {
   const [value, setValue] = useState<AlgorithmName>("Heron's method");
   const [paramValues, setParamValues] = useState<Record<string, number | string>>({ s: 0, iter: 0 });
   const showChart = value === "Heron's method" || value === "Bakhshali method";
+  const showGraph = value === "Bisection method" || value === "Newton Rhapson method" || value === "Secant method";
+  const [root, setRoot] = useState(0);
   
   const handleChange = (e: any) => {
     const nextAlg = e.target.value as AlgorithmName;
     setValue(nextAlg);
 
     const defaults: Record<string, number | string> = {};
-    for (const def of paramDefs[nextAlg]) defaults[def.key];
+    for (const def of paramDefs[nextAlg]) defaults[def.key] = def.defaultValue ?? "";
     setParamValues(defaults);
     setGuesses([]);
+    setRoot(0)
   };
 
   async function run() {
@@ -61,8 +78,10 @@ export default function App() {
   });
   const content = await rawResponse.json();
   const g = content.guesses;
-  setResult(content.Metrics);
+  setResult(content);
   setGuesses(g);
+  setRoot((content.Metrics?.["approx-value "] ?? 0))
+  console.log(root)
   }
 
   return (
@@ -78,6 +97,8 @@ export default function App() {
               <option value="Heron's method">Heron's method</option>
               <option value="Bakhshali method">Bakhshali method</option>
               <option value="Bisection method">Bisection method</option>
+              <option value="Newton Rhapson method">Newton Rhapson method</option>
+              <option value="Secant method">Secant method</option>
             </select>
           </div>
         </div>
@@ -87,12 +108,10 @@ export default function App() {
           <div className="center-container-graphs">
             <h2 className="center-container-graphsText">Algorithm: {value}</h2>
             {showChart && <Linechart guesses={guesses} />}
+            {showGraph && <Graph func={String(paramValues.f)} x1={root} y1={0}></Graph>}
           </div>
           <div className="center-container-result">
             <pre className="result-code">{JSON.stringify(result, null, 2)}</pre>
-          </div>
-          <div className="center-container-metrics">
-            <h1>Hejsa</h1>
           </div>
         </div>
 
@@ -105,14 +124,23 @@ export default function App() {
                 <input
                   type={def.type}
                   min={def.min}
+                  max={def.max}
                   placeholder={def.placeholder}
                   value={paramValues[def.key] ?? ""}
-                  onChange={(e) =>
-                    setParamValues((prev) => ({
-                      ...prev,
-                      [def.key]: e.target.value,
-                    }))
-                  }
+                  onChange={(e) => {
+                    const raw = e.target.value;
+
+                    setParamValues((prev) => {
+                      if (def.key === "iter" && def.type === "number") {
+                        const n = e.target.valueAsNumber;
+                        const min = def.min ?? 2;
+                        const max = def.max ?? 250;
+                        const clamped = Math.min(max, Math.max(min, n));
+                        return { ...prev, [def.key]: clamped };
+                      }
+                      return { ...prev, [def.key]: raw };
+                    });
+                  }}
                 />
               </div>
             ))}

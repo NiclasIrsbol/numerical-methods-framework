@@ -1,3 +1,5 @@
+@import "mafs/core.css";
+
 :root {
     --brand: #6096BA;
     --brand-light: #A3CEF1;
@@ -132,21 +134,12 @@ body {
     margin: 0;
     font-size: 16px;
     font-weight: 800;
+    margin-bottom: 10px;
 }
 
 .center-container-resultText {
     margin: 0;
     font-size: 14px;
-}
-
-.center-container-metrics {
-    border: 1px solid rgba(var(--brand-rgb), 0.25);
-    border-radius: var(--radius);
-    background: rgba(255, 255, 255, 0.88);
-    box-shadow: var(--shadow-soft);
-    width: 100%;
-    min-height: 96px;
-    padding: 12px;
 }
 
 .form-field {

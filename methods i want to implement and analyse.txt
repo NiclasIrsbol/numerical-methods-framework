@@ -3,12 +3,9 @@ Heron's method - Done
 Bakhshali method - Done
 
 Finding roots of functions: 
-Bisection method
-Newton's-Rhapsons method
-Secant Method
-
-Interpolation & Approximation
-Do research here
+Bisection method - Done
+Newton's-Rhapsons method - Done
+Secant Method - Done
 
 Systems of linear equations
 Inverse Method
