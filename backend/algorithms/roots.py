@@ -91,10 +91,15 @@ def secant_method(f, iter, x_0, x_1):
     expr = sympify(f)
     fexpr = lambdify(x, expr)
     guesses = []
-    for _ in range(iter):
-        x_2 = x_1 - fexpr(x_1) * (x_1 - x_0) / float(fexpr(x_1) - fexpr(x_0))
-        guesses.append(x_2)
-        x_0, x_1 = x_1, x_2
+    try:
+        for _ in range(iter):
+            x_2 = x_1 - fexpr(x_1) * (x_1 - x_0) / float(fexpr(x_1) - fexpr(x_0))
+            guesses.append(x_2)
+            x_0, x_1 = x_1, x_2
+    except:
+        return {"Error": {
+            "error": "An error has occured" 
+        }}
     return {
         "Metrics": {
             "approx-value ": x_2
