@@ -8,9 +8,7 @@ Newton's-Rhapsons method - Done
 Secant Method - Done
 
 Systems of linear equations
-Inverse Method
-Gauss-Jordan elimination
-LU factorization
+Inverse Method - Done
 Jacobi method
 
 Differential equations

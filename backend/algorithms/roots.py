@@ -98,7 +98,7 @@ def secant_method(f, iter, x_0, x_1):
             x_0, x_1 = x_1, x_2
     except:
         return {"Error": {
-            "error": "An error has occured" 
+            "error": "An error has occurred" 
         }}
     return {
         "Metrics": {

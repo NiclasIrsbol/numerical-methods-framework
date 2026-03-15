@@ -4,7 +4,7 @@ import { TbMathFunction } from "react-icons/tb";
 import Linechart from "./components/linecharts"
 import Graph from "./components/graph"
 
-type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method" | "Newton Rhapson method" | "Secant method";
+type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method" | "Newton Rhapson method" | "Secant method" | "Inverse method";
 
 type ParamDef = {
   key: string;
@@ -40,6 +40,11 @@ const paramDefs: Record<AlgorithmName, ParamDef[]> = {
     {key: "iter", label: "Iterations", type: "number", min: 2, max: 250, placeholder: "Number of iterations", defaultValue: 10 },
     {key: "x_0", label: "Intial guess (x0)", type: "number", placeholder: "Enter x0", defaultValue: "2"},
     {key: "x_1", label: "Intial guess (x1)", type: "number", placeholder: "Enter x1", defaultValue: "10"},
+  ],
+
+    "Inverse method": [
+    {key: "A", label: "Matrix (A)", type: "text", placeholder: "Enter matrix of systems of linear equations (left side)", defaultValue: "[2x+3y;5x+1y]"},
+    {key: "B", label: "Matrix (B)", type: "text", placeholder: "Enter matrix of systems of linear equations (right side)", defaultValue: "[50;40]"},
   ],
 
 };
@@ -81,7 +86,6 @@ export default function App() {
   setResult(content);
   setGuesses(g);
   setRoot((content.Metrics?.["approx-value "] ?? 0))
-  console.log(root)
   }
 
   return (
@@ -99,6 +103,7 @@ export default function App() {
               <option value="Bisection method">Bisection method</option>
               <option value="Newton Rhapson method">Newton Rhapson method</option>
               <option value="Secant method">Secant method</option>
+              <option value="Inverse method">Inverse method</option>
             </select>
           </div>
         </div>
