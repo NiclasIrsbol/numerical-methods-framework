@@ -56,6 +56,7 @@ export default function App() {
   const [paramValues, setParamValues] = useState<Record<string, number | string>>({ s: 0, iter: 0 });
   const showChart = value === "Heron's method" || value === "Bakhshali method";
   const showGraph = value === "Bisection method" || value === "Newton Rhapson method" || value === "Secant method";
+  const noVisualization = value === "Inverse method";
   const [root, setRoot] = useState(0);
   
   const handleChange = (e: any) => {
@@ -114,6 +115,7 @@ export default function App() {
             <h2 className="center-container-graphsText">Algorithm: {value}</h2>
             {showChart && <Linechart guesses={guesses} />}
             {showGraph && <Graph func={String(paramValues.f)} x1={root} y1={0}></Graph>}
+            {noVisualization && <h1 className="novis-text">No visualization to show for this algorithm</h1>}
           </div>
           <div className="center-container-result">
             <pre className="result-code">{JSON.stringify(result, null, 2)}</pre>

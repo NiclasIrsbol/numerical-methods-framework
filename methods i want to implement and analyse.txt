@@ -15,9 +15,6 @@ Differential equations
 Euler method
 Runge–Kutta methods
 
-Differentiation
-Do research here
-
 Integrals
 Simpsons method
 Trapezoidal rule

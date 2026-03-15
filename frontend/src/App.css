@@ -194,3 +194,7 @@ body {
     outline: none;
     box-shadow: 0 0 0 4px rgba(var(--brand-rgb), 0.25);
 }
+
+.novis-text {
+  text-align: center;
+}
