@@ -1,4 +1,4 @@
-from algorithms import square_root, roots, linear_eq
+from algorithms import square_root, roots, linear_eq, diff_eq
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,7 +16,8 @@ ALGORITHMS = {
     "Bisection method": roots.bisection_method,
     "Newton Rhapson method": roots.newton_rhapson_method,
     "Secant method": roots.secant_method,
-    "Inverse method": linear_eq.inverse_method
+    "Inverse method": linear_eq.inverse_method,
+    "Eulers method": diff_eq.eulers,
 }
 
 origins = [

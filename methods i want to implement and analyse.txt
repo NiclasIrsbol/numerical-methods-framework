@@ -9,21 +9,14 @@ Secant Method - Done
 
 Systems of linear equations
 Inverse Method - Done
-Jacobi method
 
 Differential equations
-Euler method
-Runge–Kutta methods
+Euler method - Done
 
 Integrals
 Simpsons method
 Trapezoidal rule
 Midpoint rule
-
-Optimization
-Gradient descent
-Newton’s method for optimization
-Quasi-Newton (BFGS)
 
 Metrics to add:
 Error

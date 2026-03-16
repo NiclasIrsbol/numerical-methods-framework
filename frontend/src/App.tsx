@@ -3,8 +3,9 @@ import "./App.css"
 import { TbMathFunction } from "react-icons/tb";
 import Linechart from "./components/linecharts"
 import Graph from "./components/graph"
+import EulerChart from "./components/euler-chart";
 
-type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method" | "Newton Rhapson method" | "Secant method" | "Inverse method";
+type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method" | "Newton Rhapson method" | "Secant method" | "Inverse method" | "Eulers method";
 
 type ParamDef = {
   key: string;
@@ -42,9 +43,17 @@ const paramDefs: Record<AlgorithmName, ParamDef[]> = {
     {key: "x_1", label: "Intial guess (x1)", type: "number", placeholder: "Enter x1", defaultValue: "10"},
   ],
 
-    "Inverse method": [
+  "Inverse method": [
     {key: "A", label: "Matrix (A)", type: "text", placeholder: "Enter matrix of systems of linear equations (left side)", defaultValue: "[2x+3y;5x+1y]"},
     {key: "B", label: "Matrix (B)", type: "text", placeholder: "Enter matrix of systems of linear equations (right side)", defaultValue: "[50;40]"},
+  ],
+
+  "Eulers method": [
+    {key: "f", label: "f(x)", type: "text", placeholder: "Enter function", defaultValue: "2*x"},
+    {key: "x0", label: "x0", type: "number", placeholder: "Enter value of x0", defaultValue: 1},
+    {key: "y0", label: "y0", type: "number", placeholder: "Enter value of y0", defaultValue: 1},
+    {key: "yx", label: "y(x)", type: "number", placeholder: "Enter value you want to approximate", defaultValue: 1.5},
+    {key: "h", label: "h", type: "number", placeholder: "Enter step-size h", defaultValue: 0.02},
   ],
 
 };
@@ -52,10 +61,12 @@ const paramDefs: Record<AlgorithmName, ParamDef[]> = {
 export default function App() {
   const [result, setResult] = useState(null)
   const [guesses, setGuesses] = useState([]);
+  const [eulerPoints, setEulerPoints] = useState<{ x: number; y: number }[]>([]);
   const [value, setValue] = useState<AlgorithmName>("Heron's method");
   const [paramValues, setParamValues] = useState<Record<string, number | string>>({ s: 0, iter: 0 });
   const showChart = value === "Heron's method" || value === "Bakhshali method";
   const showGraph = value === "Bisection method" || value === "Newton Rhapson method" || value === "Secant method";
+  const showEulerChart = value === "Eulers method";
   const noVisualization = value === "Inverse method";
   const [root, setRoot] = useState(0);
   
@@ -67,6 +78,7 @@ export default function App() {
     for (const def of paramDefs[nextAlg]) defaults[def.key] = def.defaultValue ?? "";
     setParamValues(defaults);
     setGuesses([]);
+    setEulerPoints([]);
     setRoot(0)
   };
 
@@ -83,9 +95,15 @@ export default function App() {
     })
   });
   const content = await rawResponse.json();
-  const g = content.guesses;
+  const g = Array.isArray(content.guesses)
+    ? content.guesses
+    : Array.isArray(content.approximations)
+      ? content.approximations
+      : [];
+  const points = Array.isArray(content.points) ? content.points : [];
   setResult(content);
   setGuesses(g);
+  setEulerPoints(points);
   setRoot((content.Metrics?.["approx-value "] ?? 0))
   }
 
@@ -105,6 +123,7 @@ export default function App() {
               <option value="Newton Rhapson method">Newton Rhapson method</option>
               <option value="Secant method">Secant method</option>
               <option value="Inverse method">Inverse method</option>
+              <option value="Eulers method">Euler's method</option>
             </select>
           </div>
         </div>
@@ -115,6 +134,7 @@ export default function App() {
             <h2 className="center-container-graphsText">Algorithm: {value}</h2>
             {showChart && <Linechart guesses={guesses} />}
             {showGraph && <Graph func={String(paramValues.f)} x1={root} y1={0}></Graph>}
+            {showEulerChart && <EulerChart points={eulerPoints} />}
             {noVisualization && <h1 className="novis-text">No visualization to show for this algorithm</h1>}
           </div>
           <div className="center-container-result">
