@@ -5,7 +5,7 @@ import Linechart from "./components/linecharts"
 import Graph from "./components/graph"
 import EulerChart from "./components/euler-chart";
 
-type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method" | "Newton Rhapson method" | "Secant method" | "Inverse method" | "Eulers method";
+type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method" | "Newton Rhapson method" | "Secant method" | "Inverse method" | "Eulers method" | "Simpson method";
 
 type ParamDef = {
   key: string;
@@ -56,6 +56,13 @@ const paramDefs: Record<AlgorithmName, ParamDef[]> = {
     {key: "h", label: "h", type: "number", placeholder: "Enter step-size h", defaultValue: 0.02},
   ],
 
+    "Simpson method": [
+    {key: "f", label: "f(x)", type: "text", placeholder: "Enter integrand", defaultValue: "2*x"},
+    {key: "a", label: "a", type: "number", placeholder: "Enter lower limit", defaultValue: 1},
+    {key: "b", label: "b", type: "number", placeholder: "Enter upper limit", defaultValue: 2},
+    {key: "n", label: "n", type: "number", placeholder: "Enter step-length", defaultValue: 8},
+  ],
+
 };
 
 export default function App() {
@@ -67,6 +74,7 @@ export default function App() {
   const showChart = value === "Heron's method" || value === "Bakhshali method";
   const showGraph = value === "Bisection method" || value === "Newton Rhapson method" || value === "Secant method";
   const showEulerChart = value === "Eulers method";
+  const showIntegralChart = value === "Simpson method";
   const noVisualization = value === "Inverse method";
   const [root, setRoot] = useState(0);
   
@@ -124,6 +132,7 @@ export default function App() {
               <option value="Secant method">Secant method</option>
               <option value="Inverse method">Inverse method</option>
               <option value="Eulers method">Euler's method</option>
+              <option value="Simpson method">Simpson method</option>
             </select>
           </div>
         </div>
