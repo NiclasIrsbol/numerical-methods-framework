@@ -48,9 +48,9 @@ export default function EulerChart({ points }: Props) {
             type="linear"
             dataKey="y"
             name="Euler approximation"
-            stroke="#6096BA"
+            stroke="#2a9d8f"
             strokeWidth={3}
-            dot={{ r: 4, fill: "#274C77" }}
+            dot={false}
             activeDot={{ r: 6 }}
           />
         </LineChart>

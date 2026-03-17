@@ -14,8 +14,8 @@ Differential equations
 Euler method - Done
 
 Integrals
-Simpsons method
-Trapezoidal rule
+Simpsons method - Done
+Trapezoidal rule - Done
 Midpoint rule
 
 Metrics to add:

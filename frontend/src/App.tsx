@@ -4,8 +4,10 @@ import { TbMathFunction } from "react-icons/tb";
 import Linechart from "./components/linecharts"
 import Graph from "./components/graph"
 import EulerChart from "./components/euler-chart";
+import CumulativeIntegralChart from "./components/cumulative-integral-chart";
+import InverseChart from "./components/inverse-chart";
 
-type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method" | "Newton Rhapson method" | "Secant method" | "Inverse method" | "Eulers method" | "Simpson method";
+type AlgorithmName = "Heron's method" | "Bakhshali method" | "Bisection method" | "Newton Rhapson method" | "Secant method" | "Inverse method" | "Eulers method" | "Simpson method" | "Trapezoidal method" | "Midpoint method";
 
 type ParamDef = {
   key: string;
@@ -28,7 +30,7 @@ const paramDefs: Record<AlgorithmName, ParamDef[]> = {
   ],
   "Bisection method": [
     {key: "f", label: "f(x)", type: "text", placeholder: "Enter function", defaultValue: "x^2"},
-    {key: "a", label: "Lower bound (a)", type: "number", placeholder: "Enter lower bound", defaultValue: 1},
+    {key: "a", label: "Lower bound (a)", type: "number", placeholder: "Enter lower bound", defaultValue: 0},
     {key: "b", label: "Upper bound (b)", type: "number", placeholder: "Enter upper bound", defaultValue: 5},
   ],
   "Newton Rhapson method": [
@@ -56,17 +58,31 @@ const paramDefs: Record<AlgorithmName, ParamDef[]> = {
     {key: "h", label: "h", type: "number", placeholder: "Enter step-size h", defaultValue: 0.02},
   ],
 
-    "Simpson method": [
+  "Simpson method": [
     {key: "f", label: "f(x)", type: "text", placeholder: "Enter integrand", defaultValue: "2*x"},
     {key: "a", label: "a", type: "number", placeholder: "Enter lower limit", defaultValue: 1},
     {key: "b", label: "b", type: "number", placeholder: "Enter upper limit", defaultValue: 2},
-    {key: "n", label: "n", type: "number", placeholder: "Enter step-length", defaultValue: 8},
+    {key: "n", label: "n", type: "number", min: 2, max: 250, placeholder: "Enter step-length", defaultValue: 8},
+  ],
+
+  "Trapezoidal method": [
+    {key: "f", label: "f(x)", type: "text", placeholder: "Enter integrand", defaultValue: "2*x"},
+    {key: "a", label: "a", type: "number", placeholder: "Enter lower limit", defaultValue: 1},
+    {key: "b", label: "b", type: "number", placeholder: "Enter upper limit", defaultValue: 2},
+    {key: "n", label: "n", type: "number", min: 2, max: 250, placeholder: "Enter step-length", defaultValue: 8},
+  ],
+
+  "Midpoint method": [
+    {key: "f", label: "f(x)", type: "text", placeholder: "Enter integrand", defaultValue: "2*x"},
+    {key: "a", label: "a", type: "number", placeholder: "Enter lower limit", defaultValue: 1},
+    {key: "b", label: "b", type: "number", placeholder: "Enter upper limit", defaultValue: 2},
+    {key: "n", label: "n", type: "number", min: 2, max: 250, placeholder: "Enter step-length", defaultValue: 8},
   ],
 
 };
 
 export default function App() {
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState<any>(null)
   const [guesses, setGuesses] = useState([]);
   const [eulerPoints, setEulerPoints] = useState<{ x: number; y: number }[]>([]);
   const [value, setValue] = useState<AlgorithmName>("Heron's method");
@@ -74,8 +90,11 @@ export default function App() {
   const showChart = value === "Heron's method" || value === "Bakhshali method";
   const showGraph = value === "Bisection method" || value === "Newton Rhapson method" || value === "Secant method";
   const showEulerChart = value === "Eulers method";
-  const showIntegralChart = value === "Simpson method";
-  const noVisualization = value === "Inverse method";
+  const showIntegralCurve = value === "Simpson method" || value === "Trapezoidal method" || value === "Midpoint method";
+  const showInverseChart = value === "Inverse method";
+  const inverseValues = Array.isArray(result?.Matrix)
+    ? result.Matrix.filter((v: unknown) => typeof v === "number" && Number.isFinite(v))
+    : [];
   const [root, setRoot] = useState(0);
   
   const handleChange = (e: any) => {
@@ -133,6 +152,8 @@ export default function App() {
               <option value="Inverse method">Inverse method</option>
               <option value="Eulers method">Euler's method</option>
               <option value="Simpson method">Simpson method</option>
+              <option value="Trapezoidal method">Trapezoidal method</option>
+              <option value="Midpoint method">Midpoint method</option>
             </select>
           </div>
         </div>
@@ -144,7 +165,15 @@ export default function App() {
             {showChart && <Linechart guesses={guesses} />}
             {showGraph && <Graph func={String(paramValues.f)} x1={root} y1={0}></Graph>}
             {showEulerChart && <EulerChart points={eulerPoints} />}
-            {noVisualization && <h1 className="novis-text">No visualization to show for this algorithm</h1>}
+            {showIntegralCurve && (
+              <CumulativeIntegralChart
+                f={String(paramValues.f ?? "x")}
+                a={Number(paramValues.a)}
+                b={Number(paramValues.b)}
+                samples={Math.max(40, Number(paramValues.n) * 20 || 120)}
+              />
+            )}
+            {showInverseChart && <InverseChart values={inverseValues} />}
           </div>
           <div className="center-container-result">
             <pre className="result-code">{JSON.stringify(result, null, 2)}</pre>
@@ -167,7 +196,7 @@ export default function App() {
                     const raw = e.target.value;
 
                     setParamValues((prev) => {
-                      if (def.key === "iter" && def.type === "number") {
+                      if (def.key === "iter" || def.key === "n" && def.type === "number") {
                         const n = e.target.valueAsNumber;
                         const min = def.min ?? 2;
                         const max = def.max ?? 250;

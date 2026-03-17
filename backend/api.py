@@ -18,7 +18,9 @@ ALGORITHMS = {
     "Secant method": roots.secant_method,
     "Inverse method": linear_eq.inverse_method,
     "Eulers method": diff_eq.eulers,
-    "Simpson method": integrals.simpsons_method
+    "Simpson method": integrals.simpsons_method,
+    "Trapezoidal method": integrals.trapezoidal,
+    "Midpoint method": integrals.midpoint
 }
 
 origins = [

@@ -33,7 +33,10 @@ export default function Linechart({ guesses }: Props) {
   }/>
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="guess" />
+          <Line type="monotone" dataKey="guess" name="Cumulative integral"
+            stroke="#2a9d8f"
+            strokeWidth={3}
+            dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
