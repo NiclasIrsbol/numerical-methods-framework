@@ -88,7 +88,7 @@ cd backend
 python -m venv venv
 venv\Scripts\activate
 pip install fastapi uvicorn sympy
-uvicorn api:app --reload --port 8000
+uvicorn api:app --reload
 ```
 
 Backend API will be available at:
@@ -101,7 +101,7 @@ From project root:
 ```bash
 cd frontend
 npm install
-npm run dev
+npx vite
 ```
 
 Frontend app will be available at:
@@ -127,10 +127,6 @@ Payload:
 
 > [!NOTE]
 > Params, and thus the payload, vary depending on the selected algorithm. 
-
-Notes:
-- `algorithm` must match one of the exact names in the UI dropdown.
-- `params` keys must match the selected algorithm signature.
 
 ## Parameter Reference
 
@@ -177,20 +173,9 @@ Example:
 - Multiplication should be explicit: `2*x` (not `2x` in function fields).
 - For trig/log/exp, use SymPy-friendly names (`sin(x)`, `log(x)`, `exp(x)`).
 
-## Known Limitations
+## Current Limitations
 
 - Simpson's rule normally requires even `n`; this is not strictly validated yet.
 - Integration methods currently cast `a`, `b`, `n` to integers in backend implementation.
 - Error metrics are not yet implemented consistently for all algorithms.
 - API request model is generic (`params: dict`) instead of per-algorithm typed schemas.
-
-## Suggested Next Improvements
-
-- Add consistent error/residual metrics for every method.
-- Validate method-specific input constraints at API level.
-- Add per-method convergence plots and error-vs-step plots.
-- Add backend tests for each algorithm and edge case.
-
-## License
-
-No license file is currently defined in this repository.
