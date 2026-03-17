@@ -57,14 +57,14 @@ The frontend currently includes dedicated visual modes:
   - Used for Heron and Bakhshali (`guesses`).
 - Function graph with approximated root marker:
   - Used for Bisection, Newton Rhapson, Secant.
+- Inverse solution bar chart:
+  - Used for Inverse method.
+  - Plots each solved variable value in the returned solution vector.
 - Euler path chart:
   - Used for Euler method (`points`).
 - Cumulative integral curve:
   - Used for Simpson, Trapezoidal, Midpoint.
   - Plots numerical accumulation I(x) = integral from a to x.
-- Inverse solution bar chart:
-  - Used for Inverse method.
-  - Plots each solved variable value in the returned solution vector.
 
 ## Project Structure
 
@@ -73,11 +73,7 @@ The frontend currently includes dedicated visual modes:
 - `frontend/src/App.tsx`: algorithm selection, parameter form, result rendering
 - `frontend/src/components/`: plotting components
 
-## Run Locally
-
-## Prerequisites
-- Python 3.10+
-- Node.js 18+
+## How to run?
 
 ## 1) Backend setup (FastAPI)
 
