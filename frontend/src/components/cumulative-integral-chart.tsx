@@ -34,7 +34,7 @@ function createEvaluator(expr: string) {
 }
 
 export default function CumulativeIntegralChart({ f, a, b, samples = 120 }: Props) {
-  if (!Number.isFinite(a) || !Number.isFinite(b) || a === b || samples < 2) {
+  if (!Number.isFinite(a) || !Number.isFinite(b)  || a === b) {
     return <p>Enter valid values for a, b, and n.</p>;
   }
 

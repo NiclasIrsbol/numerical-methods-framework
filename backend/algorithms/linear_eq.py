@@ -12,7 +12,7 @@ def inverse_method(A,B):
         x = []
         if A_sym.rows == A_sym.cols:
             x = A_sym.pinv() * b_sym
-    except Exception as e:
+    except:
         return {"Error": "An error has occurred"}
     return {
         "Matrix": [float(v.evalf()) for v in x]
