@@ -172,7 +172,4 @@ Example:
 ## Current Limitations
 
 - Simpson's rule normally requires even `n`; this is not strictly validated yet.
-- Integration methods currently cast `a`, `b`, `n` to integers in backend implementation.
-- Error metrics are not yet implemented consistently for all algorithms.
-- API request model is generic (`params: dict`) instead of per-algorithm typed schemas.
 - Iterations are capped to 250 iterations.
